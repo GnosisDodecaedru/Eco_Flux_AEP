@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFlux - Gerenciamento Inteligente de Resíduos Sólidos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Paleta Resíduos Sólidos / Sustentabilidade */
+            --primary: #65a30d;        /* Verde musgo - reciclagem, natureza */
+            --primary-dark: #4d7c0f; /* Verde oliva escuro */
+            --accent: #d97706;         /* Laranja queimado - alerta, energia, transformação */
+            --accent-light: #f59e0b;   /* Âmbar - calor, compostagem */
+            --earth: #78350f;          /* Marrom terra - solo, orgânicos */
+            --earth-light: #92400e;    /* Marrom claro - compostagem */
+            --dark: #1c1917;           /* Cinza quente escuro - concreto, urbano */
+            --darker: #0c0a09;         /* Quase preto - resíduos, profundidade */
+            --light: #fafaf9;          /* Branco quente - limpeza, pureza */
+            --gray: #a8a29e;           /* Cinza pedra - concreto, neutralidade */
+            --card-bg: rgba(28, 25, 23, 0.8);
+            --water: #0e7490;          /* Azul petróleo - água, tecnologia ambiental */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(12, 10, 9, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-btn {
+            background: var(--primary);
+            color: var(--darker);
+            padding: 0.7rem 1.8rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .cta-btn:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(101, 163, 13, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 5%;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, var(--darker) 0%, var(--dark) 40%, #1a2e05 100%);
+            z-index: -2;
+        }
+
+        /* Textura de resíduos/solo */
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(120, 53, 15, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(14, 116, 144, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(101, 163, 13, 0.08) 0%, transparent 60%);
+            z-index: -1;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--primary);
+            opacity: 0.5;
+            animation: float 15s infinite;
+        }
+
+        .particle.organic {
+            background: var(--accent);
+            width: 2px;
+            height: 2px;
+        }
+
+        .particle.water {
+            background: var(--water);
+            width: 4px;
+            height: 1px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(101, 163, 13, 0.15);
+            border: 1px solid rgba(101, 163, 13, 0.3);
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.2s both;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+            display: block;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--darker);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(101, 163, 13, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 5%;
+            background: var(--dark);
+            position: relative;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 0% 0%, rgba(120, 53, 15, 0.2) 0%, transparent 40%),
+                radial-gradient(ellipse at 100% 100%, rgba(14, 116, 144, 0.1) 0%, transparent 40%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-card:last-child {
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-card:hover {
+            background: rgba(101, 163, 13, 0.05);
+            border-color: rgba(101, 163, 13, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Mission Section */
+        .mission {
+            padding: 6rem 5%;
+            position: relative;
+            background: var(--darker);
+        }
+
+        .mission::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 100% 0%, rgba(120, 53, 15, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 0% 100%, rgba(101, 163, 13, 0.1) 0%, transparent 50%);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .mission-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mission-text h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mission-text p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .mission-visual {
+            position: relative;
+        }
+
+        .globe-container {
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .globe {
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(101, 163, 13, 0.08), rgba(120, 53, 15, 0.1)),
+                linear-gradient(45deg, rgba(14, 116, 144, 0.05), transparent);
+            border: 2px solid rgba(101, 163, 13, 0.2);
+            position: relative;
+            animation: pulse 4s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+        }
+
+        .globe-inner {
+            transform: rotate(-45deg);
+            text-align: center;
+        }
+
+        .globe::before {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border: 1px dashed rgba(101, 163, 13, 0.3);
+            animation: spin 20s linear infinite;
+        }
+
+        .globe::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            border: 1px dashed rgba(217, 119, 6, 0.2);
+            animation: spin 15s linear infinite reverse;
+        }
+
+        .globe i {
+            font-size: 5rem;
+            color: var(--primary);
+            opacity: 0.8;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(101, 163, 13, 0.1); }
+            50% { box-shadow: 0 0 60px rgba(101, 163, 13, 0.2); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Solutions Section */
+        .solutions {
+            padding: 6rem 5%;
+            background: var(--dark);
+            position: relative;
+        }
+
+        .solutions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(14, 116, 144, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(120, 53, 15, 0.15) 0%, transparent 50%);
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .solution-card:hover {
+            background: rgba(101, 163, 13, 0.03);
+            border-color: rgba(101, 163, 13, 0.15);
+            transform: translateX(5px);
+        }
+
+        .solution-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(101, 163, 13, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .solution-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            position: relative;
+            background: var(--darker);
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 0% 50%, rgba(120, 53, 15, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 50%, rgba(14, 116, 144, 0.08) 0%, transparent 50%);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .feature-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-row.reverse {
+            direction: rtl;
+        }
+
+        .feature-row.reverse > * {
+            direction: ltr;
+        }
+
+        .feature-image {
+            position: relative;
+            aspect-ratio: 16/10;
+            background: 
+                linear-gradient(135deg, #1a2e05, var(--dark)),
+                linear-gradient(45deg, rgba(120, 53, 15, 0.3), rgba(14, 116, 144, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .feature-image i {
+            font-size: 5rem;
+            color: rgba(101, 163, 13, 0.3);
+        }
+
+        .feature-content h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .feature-list li i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, #1a2e05 0%, var(--dark) 50%, #0c2d3d 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle, rgba(101, 163, 13, 0.08) 0%, transparent 70%),
+                radial-gradient(circle, rgba(120, 53, 15, 0.05) 30%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .cta-section p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            background: var(--darker);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(120, 53, 15, 0.15) 0%, transparent 50%);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: var(--darker);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mission-content,
+            .feature-row {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-row.reverse {
+                direction: ltr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-card {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+        }
+
+        /* Animations on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-recycle"></i>
+            EcoFlux
+        </a>
+        <ul class="nav-links">
+            <li><a href="#mission">Missão</a></li>
+            <li><a href="#solutions">Soluções</a></li>
+            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#stats">Impacto</a></li>
+        </ul>
+        <a href="#cta" class="cta-btn">Começar Agora</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-leaf"></i> ODS 12 - Consumo e Produção Responsáveis
+            </div>
+            <h1>
+                Gerenciamento Inteligente de
+                <span>Resíduos Sólidos</span>
+            </h1>
+            <p>
+                Conectamos geradores de resíduos a cooperativas de reciclagem, 
+                otimizando o descarte consciente e impulsionando a economia circular.
+            </p>
+            <div class="hero-buttons">
+                <a href="#solutions" class="btn-primary">
+                    <i class="fas fa-rocket"></i> Conheça a Plataforma
+                </a>
+                <a href="#mission" class="btn-secondary">
+                    <i class="fas fa-play"></i> Saiba Mais
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats" id="stats">
+        <div class="stats-grid reveal">
+            <div class="stat-card">
+                <span class="stat-number">+20%</span>
+                <span class="stat-label">Redução no tempo de espera das coletas</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Automação de chamados de coleta</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">ODS 12</span>
+                <span class="stat-label">Alinhado aos Objetivos de Desenvolvimento Sustentável</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Código modularizado e interface intuitiva</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission" id="mission">
+        <div class="section-header reveal">
+            <h2>Bem-vindo ao Futuro da Gestão de Resíduos</h2>
+            <p>A EcoFlux busca liderar uma transformação digital na gestão de resíduos sólidos urbanos, promovendo um ecossistema sustentável e com impacto positivo no meio ambiente.</p>
+        </div>
+        <div class="mission-content reveal">
+            <div class="mission-text">
+                <h3>Nossa Missão</h3>
+                <p>
+                    Desenvolver uma aplicação web funcional para o gerenciamento de coletas seletivas, 
+                    aplicando conceitos de Estrutura de Dados para organização de rotas e prioridades, 
+                    Análise Orientada a Objetos para modelagem do sistema, e uma interface responsiva via 
+                    Programação Front-End.
+                </p>
+                <p>
+                    Fundamentada na Mentalidade Criativa e Empreendedora, seguindo o método Lean Canvas, 
+                    a EcoFlux não apenas cumpre requisitos técnicos de Engenharia de Software, mas também 
+                    promove um impacto ambiental positivo.
+                </p>
+                <p style="font-style: italic; color: var(--primary); border-left: 3px solid var(--primary); padding-left: 1rem;">
+                    "A transição para a sustentabilidade exige soluções que unam a eficiência econômica à prudência ecológica." 
+                    <br><span style="font-size: 0.9rem; color: var(--gray);">— Sachs (2008)</span>
+                </p>
+            </div>
+            <div class="mission-visual">
+                <div class="globe-container">
+                    <div class="globe">
+                        <div class="globe-inner">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="solutions" id="solutions">
+        <div class="section-header reveal">
+            <h2>Soluções que integram nosso ecossistema</h2>
+            <p>Tecnologias robustas que se adequam a cooperativas e geradores de pequeno, médio e grande porte. Não importa a necessidade, nós temos a solução.</p>
+        </div>
+        <div class="solutions-grid reveal">
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <h3>Gestão de Rotas</h3>
+                <p>Otimização inteligente de rotas de coleta utilizando estruturas de dados avançadas como Filas de Prioridade e Listas Encadeadas para gerenciar ordens urgentes.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Interface Responsiva</h3>
+                <p>Front-End desenvolvido com HTML5, CSS3 e frameworks modernos, garantindo usabilidade em qualquer dispositivo para geradores e cooperativas.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>Automação de Chamados</h3>
+                <p>Sistema automatizado de solicitação de coletas com notificações em tempo real, reduzindo o tempo de espera em até 20%.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics & Relatórios</h3>
+                <p>Dashboard completo com métricas de impacto ambiental, volumes coletados e eficiência operacional para tomada de decisão.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Conexão Cooperativas</h3>
+                <p>Plataforma que conecta diretamente geradores de resíduos a cooperativas de reciclagem, eliminando intermediários e aumentando a eficiência.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Economia Circular</h3>
+                <p>Ferramentas para rastreamento e certificação de materiais recicláveis, promovendo a transparência na cadeia de reciclagem.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header reveal">
+                <h2>Funcionalidades Principais</h2>
+                <p>Desenvolvido com metodologia de ciclo de vida de software clássico e Análise Orientada a Objetos.</p>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-image">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Análise Orientada a Objetos</h3>
+                    <p>Utilizamos AOO para o levantamento de requisitos e criação de diagramas de classe, garantindo um sistema robusto e bem estruturado desde a concepção.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Diagramas de classe detalhados</li>
+                        <li><i class="fas fa-check-circle"></i> Modelagem UML completa</li>
+                        <li><i class="fas fa-check-circle"></i> Reutilização de componentes</li>
+                        <li><i class="fas fa-check-circle"></i> Código modularizado</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-row reverse reveal">
+                <div class="feature-image">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Estruturas de Dados Avançadas</h3>
+                    <p>No backend, aplicamos estruturas de dados como Filas de Prioridade para gerenciar ordens de coleta urgentes e Listas Encadeadas para organização dinâmica.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Filas de Prioridade para urgências</li>
+                        <li><i class="fas fa-check-circle"></i> Listas Encadeadas para rotas</li>
+                        <li><i class="fas fa-check-circle"></i> Árvores para indexação</li>
+                        <li><i class="fas fa-check-circle"></i> Grafos para otimização</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-image">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Design Moderno e Responsivo</h3>
+                    <p>Front-End desenvolvido com HTML5, CSS3 e frameworks modernos, garantindo uma experiência fluida e intuitiva em todos os dispositivos.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Design responsivo mobile-first</li>
+                        <li><i class="fas fa-check-circle"></i> Animações suaves e interativas</li>
+                        <li><i class="fas fa-check-circle"></i> Interface intuitiva e acessível</li>
+                        <li><i class="fas fa-check-circle"></i> Performance otimizada</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-content reveal">
+            <h2>Pronto para transformar a gestão de resíduos?</h2>
+            <p>Junte-se à EcoFlux e faça parte da revolução sustentável. Nossa plataforma está pronta para escalar e atender pequenos municípios com eficiência e impacto positivo.</p>
+            <a href="#" class="btn-primary" style="font-size: 1.1rem; padding: 1.2rem 3rem;">
+                <i class="fas fa-rocket"></i> Começar Agora
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <i class="fas fa-recycle"></i>
+                    EcoFlux
+                </a>
+                <p>Gerenciamento Inteligente de Resíduos Sólidos. Uma plataforma interdisciplinar que utiliza tecnologia para conectar geradores de resíduos a cooperativas de reciclagem.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Plataforma</h4>
+                <ul>
+                    <li><a href="#">Gestão de Rotas</a></li>
+                    <li><a href="#">Automação</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">API</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Empresa</h4>
+                <ul>
+                    <li><a href="#">Sobre Nós</a></li>
+                    <li><a href="#">Missão</a></li>
+                    <li><a href="#">ODS 12</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Recursos</h4>
+                <ul>
+                    <li><a href="#">Documentação</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Suporte</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 EcoFlux - UniCesumar. Desenvolvido por Giovanni Henrique Gazin Pasa e Gabriel Aguitoni Lázaro De Azevedo.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Particles - mix of types for sustainability feel
+        const particlesContainer = document.getElementById('particles');
+        const particleTypes = ['', 'organic', 'water'];
+        for (let i = 0; i < 60; i++) {
+            const particle = document.createElement('div');
+            const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+            particle.className = 'particle ' + type;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Scroll reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Counter animation for stats
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const text = target.textContent;
+
+                    if (text.includes('%')) {
+                        const num = parseInt(text);
+                        let current = 0;
+                        const increment = num / 50;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= num) {
+                                target.textContent = '+' + num + '%';
+                                clearInterval(timer);
+                            } else {
+                                target.textContent = '+' + Math.floor(current) + '%';
+                            }
+                        }, 30);
+                    }
+                    counterObserver.unobserve(target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(el => counterObserver.observe(el));
+    </script>
+</body>
+</html>
